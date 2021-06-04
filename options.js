@@ -1,8 +1,7 @@
 let saveButton = document.getElementById("saveButton");
 
-function handleSaveOptions(formObject) {
+function handleSaveOptions() {
 
-    console.log('start user details');
     let currentDetails = {};
 
     currentDetails.firstName = document.getElementById("firstName").value;
@@ -13,11 +12,9 @@ function handleSaveOptions(formObject) {
     currentDetails.zipCode = document.getElementById("zipCode").value;
 
     chrome.storage.sync.set({ 'userDetails': currentDetails });
-    console.log('end user details');
 }
 
 function constructOptions() {
-  
   chrome.storage.sync.get("userDetails", ( {userDetails})=> {
     document.getElementById("firstName").value = userDetails.firstName;
     document.getElementById("lastName").value = userDetails.lastName;
