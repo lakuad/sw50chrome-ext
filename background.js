@@ -7,6 +7,17 @@ let userDetails = { firstName: '',
 };
 
 
+
+
+function createNotification(){
+    var opt = {type: "basic",title: "Your Title",message: "Your message",iconUrl: "your_icon.png"}
+    chrome.notifications.create("notificationName",  opt, function(){});
+
+    //include this line if you want to clear the notification after 5 seconds
+    setTimeout(function(){chrome.notifications.clear("notificationName",function(){});},5000);
+}
+
+
 function setUserDetails() {
 
     chrome.storage.sync.get("userDetails", ({ userDetails }) => {
@@ -14,8 +25,15 @@ function setUserDetails() {
             console.warn('couldnt retrieve user details');       
             return;
         }
-        if(!userDetails){
+        if(!userDetails || !userDetails.zipCode){
             console.warn('user details are empty');
+            alert('Please setup');
+            var opt = {type: "basic",title: "Your Title",message: "Your message",iconUrl: "your_icon.png"}
+            chrome.notifications.create("notificationName",  opt, function(){});
+
+    //include this line if you want to clear the notification after 5 seconds
+    setTimeout(function(){chrome.notifications.clear("notificationName",function(){});},5000);
+           // createNotification();
             return;
         }
         document.querySelector('input[name="first_name"]').value = userDetails.firstName;
@@ -34,13 +52,17 @@ chrome.runtime.onInstalled.addListener((reason) => {
     chrome.tabs.create({
       url: 'onboarding.html'
     });
-}
+} else if (details.reason === "update") {
+    console.warn('updated');
+  } 
 });
 
 
 chrome.action.onClicked.addListener( (tab) => {
+
     chrome.scripting.executeScript({
         target: { tabId: tab.id },
         function: setUserDetails,
     });
 });
+
