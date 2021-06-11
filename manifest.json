@@ -13,6 +13,7 @@
       },
       "permissions": ["storage", "activeTab", "scripting", "notifications"],
       "action": {
+        "default_popup": "popup.html",
         "default_icon": {
             "16": "/images/ico16.png",
             "32": "/images/ico32.png",
